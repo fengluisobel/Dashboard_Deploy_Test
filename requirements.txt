@@ -4,3 +4,4 @@ pandas
 KMeans
 scikit-learn
 numpy
+matplotlib
