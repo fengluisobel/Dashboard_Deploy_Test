@@ -84,7 +84,8 @@ logo_url = "https://ui-avatars.com/api/?name=Talent+Pro&background=0068c9&color=
 # logo_url = "logo/logo_全.png" 
 
 
-st.sidebar.image(logo_url, width=150,) # 控制宽度更精致
+st.sidebar.image(logo_url, width=150) # 控制宽度更精致
+ 
 st.sidebar.title("AI Hire 驾驶舱")
 st.sidebar.caption("v3.0 Pro | Enterprise Edition")
 st.sidebar.markdown("---")
