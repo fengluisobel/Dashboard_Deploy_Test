@@ -81,7 +81,7 @@ def load_recruitment_data(months=12, recruiters=5, departments=5):
 # logo_url = "https://ui-avatars.com/api/?name=Talent+Pro&background=0068c9&color=fff&size=256&font-size=0.33&length=2&rounded=true&bold=true"
 
 
-logo_url = "E:\\AI Staff\\Dashboard_Deploy_Test\\logo\\logo_全.png"   
+logo_url = "logo/logo_全.png" 
 
 st.sidebar.image(logo_url, width=150,) # 控制宽度更精致
 st.sidebar.title("AI Hire 驾驶舱")
