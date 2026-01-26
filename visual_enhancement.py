@@ -1,4 +1,4 @@
-"""
+﻿"""
 招聘数据驾驶舱 v3.0 Pro Ultra - 视觉增强模块
 Visual Enhancement Module
 
@@ -759,3 +759,4 @@ def render_section_divider(text=""):
         """
 
     st.markdown(html, unsafe_allow_html=True)
+

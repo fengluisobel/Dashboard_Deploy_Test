@@ -1,4 +1,4 @@
-"""
+﻿"""
 招聘数据驾驶舱 v3.0 Pro - 完整数据生成模块
 包含所有81个指标的完整实现
 基于 BI指标体系.json 和 招聘指标 层级.md
@@ -234,7 +234,7 @@ def generate_complete_recruitment_data(months=12, recruiters=5, departments=5):
                 # ==========================================
 
                 # 部门招聘健康度
-                row['TTF超标率_%'] = np.random.uniform(8, 38)
+                row['到岗周期逾期率_%'] = np.random.uniform(8, 38)
                 row['面试通过率异常_标志'] = np.random.choice([0, 0, 0, 1], p=[0.7, 0.1, 0.1, 0.1])
                 row['投诉量'] = np.random.randint(0, 8)
                 row['部门健康度_得分'] = np.random.uniform(60, 98)
@@ -446,11 +446,11 @@ METRICS_METADATA = {
 
     # HRD 管理层指标
     'hrd': {
-        'TTF超标率_%': {
-            'name': 'TTF超标率',
+        '到岗周期逾期率_%': {
+            'name': '到岗周期逾期率',
             'name_en': 'TTF Overdue Rate',
             'category': '异常管理',
-            'formula': 'TTF>SLA天数的职位数 / 总职位数',
+            'formula': '到岗周期>SLA天数的职位数 / 总职位数',
             'definition': '招聘周期超过承诺SLA的职位比例',
             'boss_comment': '不要给我看平均数,告诉我哪个部门出问题了',
             'benchmark': {'正常': '<15%', '警告': '15-25%', '严重': '>25%'},
@@ -556,3 +556,4 @@ if __name__ == '__main__':
     print(df.head())
     print(f"\n数据统计:")
     print(df.describe())
+

@@ -1,4 +1,4 @@
-"""
+﻿"""
 品牌色系统模块 v3.0 Pro
 完整集成 color_settting.py 的所有功能
 支持图片上传、颜色提取、色阶生成、全局主题应用
@@ -226,6 +226,51 @@ def inject_custom_css(font_family, primary_color, background_color="#FFFFFF", te
             background: linear-gradient(180deg, {primary_color}10 0%, #ffffff 100%);
             border-right: 1px solid {primary_color}20;
         }}
+        
+        /* 侧边栏深色主题对比度修复 */
+        section[data-testid="stSidebar"] .stButton > button {{
+            background: {primary_color} !important;
+            color: white !important;
+            border: none !important;
+            font-weight: 600 !important;
+        }}
+        
+        section[data-testid="stSidebar"] .stButton > button:hover {{
+            background: {primary_color}dd !important;
+            color: white !important;
+        }}
+        
+        /* 侧边栏输入框和选择器文字对比度修复 */
+        section[data-testid="stSidebar"] input,
+        section[data-testid="stSidebar"] select,
+        section[data-testid="stSidebar"] .stSelectbox label,
+        section[data-testid="stSidebar"] .stDateInput label,
+        section[data-testid="stSidebar"] .stMultiSelect label,
+        section[data-testid="stSidebar"] .stRadio label,
+        section[data-testid="stSidebar"] .stTextInput label {{
+            color: inherit !important;
+        }}
+        
+        /* 侧边栏内的文本输入框背景和文字 */
+        section[data-testid="stSidebar"] .stTextInput input,
+        section[data-testid="stSidebar"] .stDateInput input,
+        section[data-testid="stSidebar"] .stNumberInput input {{
+            background-color: white !important;
+            color: #1a1a1a !important;
+            border: 1px solid #ddd !important;
+        }}
+        
+        /* 侧边栏下拉选择器 */
+        section[data-testid="stSidebar"] .stSelectbox > div > div {{
+            background-color: white !important;
+            color: #1a1a1a !important;
+        }}
+        
+        /* 侧边栏多选框 */
+        section[data-testid="stSidebar"] .stMultiSelect > div > div {{
+            background-color: white !important;
+            color: #1a1a1a !important;
+        }}
 
         /* ==========================================
            按钮样式
@@ -286,26 +331,77 @@ def inject_custom_css(font_family, primary_color, background_color="#FFFFFF", te
 # 2. 品牌色系统初始化
 # ==========================================
 
+import json
+import os
+
+# 品牌配置文件路径
+BRAND_CONFIG_FILE = "brand_config.json"
+
+def load_brand_config():
+    """
+    从JSON文件加载品牌配置
+    """
+    if os.path.exists(BRAND_CONFIG_FILE):
+        try:
+            with open(BRAND_CONFIG_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except:
+            return None
+    return None
+
+def save_brand_config():
+    """
+    保存品牌配置到JSON文件
+    """
+    config = {
+        'brand_colors': st.session_state.get('brand_colors', []),
+        'primary_color': st.session_state.get('primary_color', '#667eea'),
+        'brand_font': st.session_state.get('brand_font', 'Inter'),
+        'is_brand_confirmed': st.session_state.get('is_brand_confirmed', False)
+    }
+    
+    try:
+        with open(BRAND_CONFIG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(config, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"保存品牌配置失败: {e}")
+
 def initialize_brand_system():
     """
     初始化品牌色系统的 session_state
+    优先从保存的JSON文件加载配置
     """
+    # 尝试从文件加载已保存的配置
+    saved_config = load_brand_config()
+    
     if 'brand_colors' not in st.session_state:
-        # 默认配色：科技蓝紫渐变
-        st.session_state['brand_colors'] = [
-            '#667eea', '#764ba2', '#f093fb', '#4facfe',
-            '#00f2fe', '#43e97b', '#38f9d7', '#fa709a',
-            '#fee140', '#30cfd0'
-        ]
+        if saved_config and 'brand_colors' in saved_config:
+            st.session_state['brand_colors'] = saved_config['brand_colors']
+        else:
+            # 默认配色：科技蓝紫渐变
+            st.session_state['brand_colors'] = [
+                '#667eea', '#764ba2', '#f093fb', '#4facfe',
+                '#00f2fe', '#43e97b', '#38f9d7', '#fa709a',
+                '#fee140', '#30cfd0'
+            ]
 
     if 'brand_font' not in st.session_state:
-        st.session_state['brand_font'] = "Inter"
+        if saved_config and 'brand_font' in saved_config:
+            st.session_state['brand_font'] = saved_config['brand_font']
+        else:
+            st.session_state['brand_font'] = "Inter"
 
     if 'primary_color' not in st.session_state:
-        st.session_state['primary_color'] = "#667eea"
+        if saved_config and 'primary_color' in saved_config:
+            st.session_state['primary_color'] = saved_config['primary_color']
+        else:
+            st.session_state['primary_color'] = "#667eea"
 
     if 'is_brand_confirmed' not in st.session_state:
-        st.session_state['is_brand_confirmed'] = False
+        if saved_config and 'is_brand_confirmed' in saved_config:
+            st.session_state['is_brand_confirmed'] = saved_config['is_brand_confirmed']
+        else:
+            st.session_state['is_brand_confirmed'] = False
 
     if 'extracted_colors' not in st.session_state:
         st.session_state['extracted_colors'] = []
@@ -529,7 +625,222 @@ def apply_brand_theme():
 
 
 # ==========================================
-# 5. 测试示例
+# 5. 品牌色配置界面 (内联版本 - 用于右侧面板)
+# ==========================================
+
+def render_brand_color_configurator_inline():
+    """
+    渲染品牌色配置界面 (内联版本，用于主内容区右侧)
+    使用 st.expander 实现可折叠面板
+    """
+    import os
+    
+    # 自定义Logo保存路径
+    custom_logo_path = "logo/custom_logo.png"
+    
+    with st.expander("🎨 品牌风格定制 (全局设置)", expanded=False):
+        
+        # ==========================================
+        # Logo 上传区域
+        # ==========================================
+        st.subheader("🖼️ Logo 设置")
+        
+        logo_file = st.file_uploader(
+            "上传自定义 Logo (JPG/PNG)",
+            type=['jpg', 'png', 'jpeg'],
+            key="logo_uploader_inline"
+        )
+        
+        if logo_file is not None:
+            # 保存到本地文件
+            try:
+                # 确保logo目录存在
+                os.makedirs("logo", exist_ok=True)
+                
+                # 保存上传的文件
+                with open(custom_logo_path, "wb") as f:
+                    f.write(logo_file.getbuffer())
+                
+                st.session_state['custom_logo_path'] = custom_logo_path
+                st.success("✅ Logo 已保存并更新！")
+                st.image(custom_logo_path, caption="新 Logo 预览", width=150)
+            except Exception as e:
+                st.error(f"保存Logo失败: {e}")
+        
+        # 检查是否存在自定义Logo文件
+        if os.path.exists(custom_logo_path):
+            st.info("📌 当前使用自定义 Logo")
+            st.image(custom_logo_path, width=100)
+            
+            if st.button("🔄 恢复默认 Logo", key="reset_logo"):
+                try:
+                    os.remove(custom_logo_path)
+                    if 'custom_logo_path' in st.session_state:
+                        del st.session_state['custom_logo_path']
+                    st.success("✅ 已恢复默认 Logo")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"删除失败: {e}")
+        
+        st.markdown("---")
+        
+        # ==========================================
+        # 品牌色提取区域
+        # ==========================================
+        st.subheader("🎨 品牌配色")
+        st.info("上传您的品牌 Logo 或 PPT 截图，系统将自动提取配色")
+
+        uploaded_file = st.file_uploader(
+            "上传品牌图片提取配色 (JPG/PNG)",
+            type=['jpg', 'png', 'jpeg'],
+            key="brand_image_uploader_inline"
+        )
+
+        # 如果上传了图片
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+
+            # 显示预览
+            st.image(image, caption="品牌素材预览", use_container_width=True)
+
+            # 提取颜色按钮
+            if st.button("🔍 提取品牌基因", type="primary", key="extract_brand_inline"):
+                with st.spinner("正在分析像素并提取主色调..."):
+                    extracted = extract_colors_from_image(image, num_colors=6)
+                    st.session_state['extracted_colors'] = extracted
+                    st.session_state['is_brand_confirmed'] = False
+                    st.success("✅ 提取成功！请在下方配置")
+
+        # 如果已经提取了颜色但还没确认
+        if st.session_state['extracted_colors'] and not st.session_state['is_brand_confirmed']:
+            st.markdown("---")
+            st.subheader("🛠️ 配色方案确认")
+
+            # 显示提取的颜色
+            st.write("**提取到的主色调：**")
+
+            # 使用 columns 显示颜色选择器
+            cols = st.columns(3)
+            for idx, color in enumerate(st.session_state['extracted_colors']):
+                col_idx = idx % 3
+                with cols[col_idx]:
+                    new_color = st.color_picker(
+                        f"色{idx+1}",
+                        color,
+                        key=f"brand_color_picker_inline_{idx}"
+                    )
+                    # 更新颜色
+                    st.session_state['extracted_colors'][idx] = new_color
+
+            # 主色选择
+            st.write("**选择主色：**")
+            primary_idx = st.selectbox(
+                "哪个颜色作为主色？",
+                range(len(st.session_state['extracted_colors'])),
+                format_func=lambda x: f"颜色 {x+1}",
+                key="primary_color_selector_inline"
+            )
+
+            st.session_state['primary_color'] = st.session_state['extracted_colors'][primary_idx]
+
+            # 配色方案类型
+            st.write("**配色方案：**")
+            scheme_type = st.radio(
+                "选择图表配色逻辑",
+                ["单色渐变 (专业/极简)", "提取色混合 (多彩/活力)", "互补色方案 (对比/高端)"],
+                key="scheme_type_selector_inline"
+            )
+
+            # 生成最终配色
+            final_palette = []
+
+            if scheme_type == "单色渐变 (专业/极简)":
+                final_palette = generate_palette(st.session_state['primary_color'], n=10)
+
+            elif scheme_type == "提取色混合 (多彩/活力)":
+                final_palette = st.session_state['extracted_colors']
+
+            else:  # 互补色方案
+                final_palette = generate_complementary_palette(
+                    st.session_state['extracted_colors'][:3],
+                    n_per_color=3
+                )
+
+            # 预览色条
+            st.write("**生成的图表色阶预览：**")
+
+            # 创建预览图
+            fig_preview = go.Figure()
+
+            for idx, color in enumerate(final_palette):
+                fig_preview.add_trace(go.Bar(
+                    x=[idx],
+                    y=[1],
+                    marker_color=color,
+                    showlegend=False,
+                    hovertemplate=f'颜色: {color}<extra></extra>'
+                ))
+
+            fig_preview.update_layout(
+                height=80,
+                margin=dict(l=0, r=0, t=0, b=0),
+                xaxis_visible=False,
+                yaxis_visible=False,
+                plot_bgcolor='rgba(0,0,0,0)',
+                paper_bgcolor='rgba(0,0,0,0)',
+                bargap=0.1
+            )
+
+            st.plotly_chart(fig_preview, use_container_width=True)
+
+            # 字体选择
+            st.write("**字体风格：**")
+            font_choice = st.selectbox(
+                "选择应用字体",
+                ["Inter", "Roboto", "Open Sans", "Lato", "Montserrat"],
+                key="font_selector_inline"
+            )
+
+            # 确认按钮
+            if st.button("✅ 确认并应用该品牌风格", type="primary", key="confirm_brand_inline"):
+                st.session_state['brand_colors'] = final_palette
+                st.session_state['brand_font'] = font_choice
+                st.session_state['is_brand_confirmed'] = True
+                # 保存到文件实现持久化
+                save_brand_config()
+                st.rerun()
+
+        # 如果已经确认，显示重置按钮
+        if st.session_state['is_brand_confirmed']:
+            st.success("✅ 品牌风格已应用")
+
+            # 显示当前配色
+            st.write("**当前品牌色：**")
+            preview_cols = st.columns(5)
+            for idx, color in enumerate(st.session_state['brand_colors'][:5]):
+                with preview_cols[idx]:
+                    st.markdown(
+                        f'<div style="background-color:{color};height:30px;border-radius:4px;"></div>',
+                        unsafe_allow_html=True
+                    )
+
+            if st.button("🔄 重置品牌风格", key="reset_brand_inline"):
+                st.session_state['is_brand_confirmed'] = False
+                st.session_state['extracted_colors'] = []
+                st.session_state['brand_colors'] = [
+                    '#667eea', '#764ba2', '#f093fb', '#4facfe',
+                    '#00f2fe', '#43e97b', '#38f9d7', '#fa709a',
+                    '#fee140', '#30cfd0'
+                ]
+                st.session_state['primary_color'] = "#667eea"
+                st.session_state['brand_font'] = "Inter"
+                # 保存到文件实现持久化
+                save_brand_config()
+                st.rerun()
+
+
+# ==========================================
+# 6. 测试示例
 # ==========================================
 
 if __name__ == '__main__':
@@ -607,3 +918,4 @@ if __name__ == '__main__':
     st.plotly_chart(fig, use_container_width=True)
 
     st.success("✅ 品牌色系统测试完成")
+

@@ -1,0 +1,17 @@
+{
+  "brand_colors": [
+    "#667eea",
+    "#764ba2",
+    "#f093fb",
+    "#4facfe",
+    "#00f2fe",
+    "#43e97b",
+    "#38f9d7",
+    "#fa709a",
+    "#fee140",
+    "#30cfd0"
+  ],
+  "primary_color": "#667eea",
+  "brand_font": "Inter",
+  "is_brand_confirmed": false
+}

@@ -1,4 +1,4 @@
-"""
+﻿"""
 招聘数据驾驶舱 v3.0 Pro - 完整集成版
 整合所有模块的主程序
 
@@ -18,7 +18,7 @@ import os
 from data_generator_complete import generate_complete_recruitment_data, METRICS_METADATA
 from brand_color_system import (
     initialize_brand_system,
-    render_brand_color_configurator,
+    render_brand_color_configurator_inline,
     apply_brand_theme,
     get_brand_colors,
     get_primary_color
@@ -71,20 +71,17 @@ def load_recruitment_data(months=12, recruiters=5, departments=5):
 # 侧边栏：全局控制
 # ==========================================
 
-# st.sidebar.image("https://via.placeholder.com/300x80/667eea/ffffff?text=Recruitment+Dashboard", use_container_width=True)
+import os
 
-# st.sidebar.title("📊 招聘数据驾驶舱 v3.0 Pro")
-# st.sidebar.markdown("---")
+# Logo显示 - 优先使用用户自定义Logo文件，否则使用默认Logo
+default_logo = "logo/logo_全.png"
+custom_logo_path = "logo/custom_logo.png"
 
-
-# 自动生成带背景色的专业 Logo
-logo_url = "https://ui-avatars.com/api/?name=Talent+Pro&background=0068c9&color=fff&size=256&font-size=0.33&length=2&rounded=true&bold=true"
-
-
-# logo_url = "logo/logo_全.png" 
-
-
-st.sidebar.image(logo_url, width=150) # 控制宽度更精致
+# 检查自定义Logo文件是否存在
+if os.path.exists(custom_logo_path):
+    st.sidebar.image(custom_logo_path, width=150)
+else:
+    st.sidebar.image(default_logo, width=150)
  
 st.sidebar.title("AI Hire 驾驶舱")
 st.sidebar.caption("v3.0 Pro | Enterprise Edition")
@@ -102,12 +99,10 @@ role = st.sidebar.radio(
 
 st.sidebar.markdown("---")
 
-# 品牌色配置器
-render_brand_color_configurator()
-
-st.sidebar.markdown("---")
-
+# ==========================================
 # 数据生成配置
+# ==========================================
+
 st.sidebar.subheader("⚙️ 数据配置")
 
 with st.sidebar.expander("数据生成参数", expanded=False):
@@ -118,6 +113,159 @@ with st.sidebar.expander("数据生成参数", expanded=False):
     if st.button("🔄 重新生成数据", key="regenerate_data"):
         st.cache_data.clear()
         st.rerun()
+
+# 加载数据
+with st.spinner("正在加载招聘数据..."):
+    df = load_recruitment_data(months=months, recruiters=recruiters, departments=departments)
+
+st.sidebar.markdown("---")
+
+# ==========================================
+# 侧边栏：数据筛选器（根据角色动态切换）
+# ==========================================
+
+st.sidebar.subheader("🔍 数据筛选")
+
+# 初始化筛选后的数据
+df_filtered = df.copy()
+
+if role == "HRVP (战略驾驶舱)":
+    # HRVP: 时间粒度 + 时间范围 + 快捷筛选
+    
+    # 快捷筛选按钮
+    st.sidebar.markdown("**⚡ 快捷筛选:**")
+    quick_col1, quick_col2 = st.sidebar.columns(2)
+    
+    with quick_col1:
+        if st.button("近3个月", key="hrvp_quick_3m_sidebar", use_container_width=True):
+            st.session_state.hrvp_quick_filter = "3m"
+    
+    with quick_col2:
+        if st.button("近半年", key="hrvp_quick_6m_sidebar", use_container_width=True):
+            st.session_state.hrvp_quick_filter = "6m"
+    
+    if st.sidebar.button("全部时间", key="hrvp_quick_all_sidebar", use_container_width=True):
+        st.session_state.hrvp_quick_filter = "all"
+    
+    st.sidebar.markdown("")
+    
+    # 时间粒度
+    time_granularity = st.sidebar.selectbox(
+        "时间粒度",
+        ["月度", "季度", "年度"],
+        key="hrvp_time_granularity_sidebar"
+    )
+    
+    # 处理快捷筛选
+    if 'hrvp_quick_filter' in st.session_state and st.session_state.hrvp_quick_filter != "all":
+        end_date = df['月份'].max()
+        
+        if st.session_state.hrvp_quick_filter == "3m":
+            start_date = end_date - pd.DateOffset(months=3)
+            st.sidebar.info(f"🔍 近3个月")
+        elif st.session_state.hrvp_quick_filter == "6m":
+            start_date = end_date - pd.DateOffset(months=6)
+            st.sidebar.info(f"🔍 近半年")
+        
+        df_filtered = df[df['月份'] >= start_date].copy()
+    else:
+        # 常规时间筛选
+        if time_granularity == "月度":
+            start_month = st.sidebar.date_input("开始月份", df['月份'].min(), key="hrvp_start_sidebar")
+            end_month = st.sidebar.date_input("结束月份", df['月份'].max(), key="hrvp_end_sidebar")
+            df_filtered = df[
+                (df['月份'] >= pd.to_datetime(start_month)) &
+                (df['月份'] <= pd.to_datetime(end_month))
+            ].copy()
+        elif time_granularity == "季度":
+            quarters = df['季度'].unique()
+            start_quarter = st.sidebar.selectbox("开始季度", quarters, key="hrvp_start_q_sidebar")
+            end_quarter = st.sidebar.selectbox("结束季度", quarters, index=len(quarters)-1, key="hrvp_end_q_sidebar")
+            start_idx = list(quarters).index(start_quarter)
+            end_idx = list(quarters).index(end_quarter)
+            selected_quarters = quarters[start_idx:end_idx+1]
+            df_filtered = df[df['季度'].isin(selected_quarters)].copy()
+        else:
+            years = df['年份'].unique()
+            start_year = st.sidebar.selectbox("开始年份", years, key="hrvp_start_y_sidebar")
+            end_year = st.sidebar.selectbox("结束年份", years, index=len(years)-1, key="hrvp_end_y_sidebar")
+            df_filtered = df[
+                (df['年份'] >= start_year) &
+                (df['年份'] <= end_year)
+            ].copy()
+    
+    # 存储时间粒度供dashboard使用
+    st.session_state['current_time_granularity'] = time_granularity
+
+elif role == "HRD (异常报警器)":
+    # HRD: 时间粒度 + 时间范围 + 部门多选
+    
+    time_granularity = st.sidebar.selectbox(
+        "时间粒度",
+        ["周度", "月度"],
+        key="hrd_time_granularity_sidebar"
+    )
+    
+    start_month = st.sidebar.date_input("开始时间", df['月份'].min(), key="hrd_start_sidebar")
+    end_month = st.sidebar.date_input("结束时间", df['月份'].max(), key="hrd_end_sidebar")
+    
+    selected_depts = st.sidebar.multiselect(
+        "部门筛选 (可多选)",
+        options=df['部门'].unique().tolist(),
+        default=df['部门'].unique().tolist(),
+        key="hrd_dept_filter_sidebar"
+    )
+    
+    # 数据筛选
+    df_filtered = df[
+        (df['月份'] >= pd.to_datetime(start_month)) &
+        (df['月份'] <= pd.to_datetime(end_month)) &
+        (df['部门'].isin(selected_depts))
+    ].copy()
+    
+    st.session_state['current_time_granularity'] = time_granularity
+
+elif role == "HR (任务管理器)":
+    # HR: 当前用户 + 时间范围
+    
+    recruiter_list = df['招聘顾问'].unique().tolist()
+    
+    selected_recruiter = st.sidebar.selectbox(
+        "👤 当前用户",
+        recruiter_list,
+        key="hr_user_selector_sidebar"
+    )
+    
+    st.sidebar.info(f"仅显示 **{selected_recruiter}** 的数据")
+    
+    time_range = st.sidebar.selectbox(
+        "时间范围",
+        ["今日", "本周", "本月", "自定义"],
+        key="hr_time_range_sidebar"
+    )
+    
+    custom_days = 7
+    if time_range == "自定义":
+        custom_days = st.sidebar.number_input("过去N天", min_value=1, max_value=90, value=7, key="hr_custom_days_sidebar")
+    
+    # 数据筛选 - 只看自己的数据
+    df_my_data = df[df['招聘顾问'] == selected_recruiter].copy()
+    
+    if time_range == "今日":
+        today = df_my_data['月份'].max()
+        df_filtered = df_my_data[df_my_data['月份'] == today].copy()
+    elif time_range == "本周":
+        last_week = df_my_data['月份'].max() - pd.Timedelta(days=7)
+        df_filtered = df_my_data[df_my_data['月份'] >= last_week].copy()
+    elif time_range == "本月":
+        current_month = df_my_data['月份'].max().replace(day=1)
+        df_filtered = df_my_data[df_my_data['月份'] >= current_month].copy()
+    else:
+        cutoff_date = df_my_data['月份'].max() - pd.Timedelta(days=custom_days)
+        df_filtered = df_my_data[df_my_data['月份'] >= cutoff_date].copy()
+    
+    st.session_state['selected_recruiter'] = selected_recruiter
+    st.session_state['hr_time_range'] = time_range
 
 st.sidebar.markdown("---")
 
@@ -160,35 +308,30 @@ with st.sidebar.expander("📖 使用帮助"):
 
 
 # ==========================================
+# 主内容区：品牌风格定制（右侧可折叠面板）
+# ==========================================
+
+# 使用 columns 布局，将品牌设置放在右上角
+brand_col1, brand_col2 = st.columns([3, 1])
+
+with brand_col2:
+    render_brand_color_configurator_inline()
+
+
+# ==========================================
 # 主内容区：根据角色渲染不同看板
 # ==========================================
 
-# 加载数据
-with st.spinner("正在加载招聘数据..."):
-    df = load_recruitment_data(months=months, recruiters=recruiters, departments=departments)
-
 # 渲染对应角色的看板
 if role == "HRVP (战略驾驶舱)":
-    render_hrvp_dashboard(df)
+    render_hrvp_dashboard(df_filtered)
 
 elif role == "HRD (异常报警器)":
-    render_hrd_dashboard(df)
+    render_hrd_dashboard(df_filtered)
 
 elif role == "HR (任务管理器)":
-    # HR需要选择具体的招聘顾问
-    recruiter_list = df['招聘顾问'].unique().tolist()
-
-    # 在主内容区顶部让用户选择
-    st.markdown("### 👤 选择招聘顾问")
-    selected_recruiter = st.selectbox(
-        "当前用户 (HR只能查看自己的数据)",
-        recruiter_list,
-        key="hr_main_user_selector"
-    )
-
-    st.markdown("---")
-
-    render_hr_dashboard(df, selected_recruiter=selected_recruiter)
+    selected_recruiter = st.session_state.get('selected_recruiter', df['招聘顾问'].unique()[0])
+    render_hr_dashboard(df_filtered, selected_recruiter=selected_recruiter)
 
 
 # ==========================================
@@ -232,3 +375,4 @@ st.markdown("""
     <a href="https://github.com/yourusername/recruitment-dashboard" target="_blank" style="color: #667eea;">GitHub</a>
 </div>
 """, unsafe_allow_html=True)
+

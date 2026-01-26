@@ -1,4 +1,4 @@
-import streamlit as st
+﻿import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -908,3 +908,4 @@ st.markdown("""
     <p>基于《驾驶舱-人力资源招聘指标体系》构建</p>
 </div>
 """.format(datetime.now().strftime('%Y-%m-%d %H:%M:%S')), unsafe_allow_html=True)
+

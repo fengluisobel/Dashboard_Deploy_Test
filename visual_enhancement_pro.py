@@ -1,4 +1,4 @@
-"""
+﻿"""
 招聘数据驾驶舱 v3.0 Pro Max - 专业级UI/UX视觉系统
 Professional UI/UX Enhancement Module
 
@@ -1020,3 +1020,4 @@ if __name__ == '__main__':
 
     st.markdown("---")
     st.markdown("© 2026 招聘数据驾驶舱 v3.0 Pro Max - 专业级UI/UX视觉系统")
+
