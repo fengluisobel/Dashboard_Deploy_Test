@@ -1,4 +1,4 @@
-"""
+﻿"""
 颜色对比度验证脚本
 验证所有颜色是否符合WCAG 2.1 AAA级标准 (对比度 >= 7:1)
 """
@@ -153,3 +153,4 @@ for name, old_color, new_color in improvements:
 
 print()
 print("=" * 80)
+

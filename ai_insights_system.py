@@ -1,4 +1,4 @@
-"""
+﻿"""
 AI 洞察系统 v3.0 Pro
 智能分析招聘数据，生成可执行的洞察和建议
 
@@ -129,7 +129,7 @@ class RecruitmentInsightsEngine:
         if avg_sourcing > 15:
             bottlenecks.append(f"候选人寻访慢 ({avg_sourcing:.0f}天)")
         if avg_ttf > 45:
-            bottlenecks.append(f"整体TTF过长 ({avg_ttf:.0f}天)")
+            bottlenecks.append(f"整体到岗周期过长 ({avg_ttf:.0f}天)")
 
         return "、".join(bottlenecks) if bottlenecks else "各环节正常，可能是JD要求过高"
 
@@ -242,7 +242,7 @@ class RecruitmentInsightsEngine:
                 'root_cause': self._diagnose_department_issues(worst_dept),
                 'recommendation': [
                     f"立即约谈 {worst_dept} 负责人，了解具体困难",
-                    "分析该部门TTF超标原因，可能需要调整JD或薪资",
+                    "分析该部门到岗周期逾期原因，可能需要调整JD或薪资",
                     "考虑增派招聘顾问支援"
                 ],
                 'metric_key': '部门健康度_得分'
@@ -256,8 +256,8 @@ class RecruitmentInsightsEngine:
 
         issues = []
 
-        if dept_data['TTF超标率_%'].mean() > 25:
-            issues.append("TTF严重超标")
+        if dept_data['到岗周期逾期率_%'].mean() > 25:
+            issues.append("到岗周期严重逾期")
         if dept_data['Offer毁约率_%'].mean() > 10:
             issues.append("Offer毁约率高")
         if dept_data['投诉量'].sum() > 10:
@@ -545,3 +545,4 @@ if __name__ == '__main__':
 
     # 渲染洞察
     render_insights_panel(df, role=role)
+

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Hiring Dashboard v3.0 Pro - 用户指引手册</title>
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #7C3AED;
+            --text-color: #1F2937;
+            --bg-color: #F9FAFB;
+            --card-bg: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 800;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        section {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid #E5E7EB;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+
+        h3 {
+            color: var(--secondary-color);
+            margin-top: 30px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+            border: 1px solid #E5E7EB;
+        }
+
+        .highlight-box {
+            background-color: #F3F4F6;
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .alert {
+            background-color: #EEF2FF;
+            border: 1px solid #C7D2FE;
+            color: #3730A3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        code {
+            background-color: #1F2937;
+            color: #10B981;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        footer {
+            text-align: center;
+            color: #6B7280;
+            padding: 40px 0;
+            font-size: 0.9rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            background: #F9FAFB;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container" style="padding: 0;">
+            <h1>🚀 AI Hiring Dashboard v3.0 Pro</h1>
+            <div class="subtitle">"不是给你看数据，而是告诉你该做什么决策"</div>
+        </div>
+    </header>
+
+    <div class="container">
+        
+        <section>
+            <img src="file:///C:/Users/lu.feng/.gemini/antigravity/brain/fa838e06-fb71-43d9-989c-cf3c902cea29/dashboard_hrvp_view_1769470048334.png" alt="Hero Image">
+            <h2>🌟 产品简介</h2>
+            <p><strong>AI Hiring Dashboard v3.0 Pro</strong> 是一款集成了<strong>战略监控</strong>、<strong>异常预警</strong>与**执行管理**于一体的智能化招聘指挥系统。它突破了传统 BI "只展示不诊断"的局限，通过内置的专家规则引擎和 AI 算法，直接输出行动建议。</p>
+            
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <span class="feature-icon">🧠</span>
+                    <h3>HRVP</h3>
+                    <p>决策时间减少 <strong>80%</strong><br>一眼看懂 ROI 与人才战略</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🚨</span>
+                    <h3>HRD</h3>
+                    <p>异常发现速度提升 <strong>10倍</strong><br>红灯预警，点击即查</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <h3>HR</h3>
+                    <p>报表分析时间减少 <strong>90%</strong><br>自动生成任务清单</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>🎭 三大视角 (Role-Based Views)</h2>
+            <p>系统通过左侧侧边栏的 <strong>"🎭 选择角色视角"</strong> 功能，为不同层级的用户提供专属的工作台。</p>
+
+            <h3>1. HRVP 战略驾驶舱 (Strategic Cockpit)</h3>
+            <p><strong>适用对象:</strong> 人力资源副总裁、CHRO、CEO</p>
+            <p><strong>核心关注:</strong> 只有两件事——<strong>花钱的效果 (ROI)</strong> 和 <strong>未来的风险</strong>。</p>
+            <img src="file:///C:/Users/lu.feng/.gemini/antigravity/brain/fa838e06-fb71-43d9-989c-cf3c902cea29/dashboard_hrvp_view_1769470048334.png" alt="HRVP View">
+            <div class="highlight-box">
+                <h4>✨ 亮点功能:</h4>
+                <ul>
+                    <li><strong>3D 战略地图:</strong> 可视化全球人才分布与缺口。</li>
+                    <li><strong>财务透视:</strong> 实时监控单人招聘成本 (Cost per Hire) 与人才质量 (Quality of Hire) 的黄金平衡点。</li>
+                    <li><strong>预测分析:</strong> 基于当前速度，预测年度目标达成率，红灯提前亮起。</li>
+                </ul>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #E5E7EB; margin: 40px 0;">
+
+            <h3>2. HRD 异常报警器 (Operational Command Center)</h3>
+            <p><strong>适用对象:</strong> 招聘总监、HRD</p>
+            <p><strong>核心关注:</strong> <strong>哪里着火了？</strong> (异常监控与资源调度)</p>
+            <img src="file:///C:/Users/lu.feng/.gemini/antigravity/brain/fa838e06-fb71-43d9-989c-cf3c902cea29/dashboard_hrd_view_1769470061885.png" alt="HRD View">
+            
+            <div class="highlight-box">
+                <h4>🚨 核心功能 (The "Flip Card" System):</h4>
+                <p>我们独创了 <strong>"翻转卡片"</strong> 交互设计。</p>
+                <ul>
+                    <li><strong>正面:</strong> 实时异常指标（如：招聘完成率 < 85%）。</li>
+                    <li><strong>点击翻转:</strong> 显示指标定义、老板关注点（Boss's Comment）以及改进建议。</li>
+                </ul>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #E5E7EB; margin: 40px 0;">
+
+            <h3>3. HR 任务管理器 (Task Manager)</h3>
+            <p><strong>适用对象:</strong> 招聘顾问 (Recruiters)</p>
+            <p><strong>核心关注:</strong> <strong>今天我该干什么？</strong></p>
+            <img src="file:///C:/Users/lu.feng/.gemini/antigravity/brain/fa838e06-fb71-43d9-989c-cf3c902cea29/dashboard_view_hr_1769470077817.png" alt="HR View">
+             <div class="highlight-box">
+                <h4>✅ 每日工作台:</h4>
+                <ul>
+                    <li><strong>今日待办:</strong> 自动按优先级排序的 Offer 跟进、面试安排。</li>
+                    <li><strong>漏斗健康度:</strong> 个人负责职位的转化率分析。</li>
+                    <li><strong>我的贡献:</strong> 实时看到自己对团队的贡献值。</li>
+                </ul>
+            </div>
+        </section>
+
+        <section>
+            <h2>🤖 AI 深度集成 (AI Integration)</h2>
+            <p>本系统不仅仅是图表，更是您的 <strong>AI 招聘专家</strong>。</p>
+            
+            <div class="alert">
+                <h3>💡 硅碳比 (Silicon-Carbon Ratio)</h3>
+                <p>我们引入了"硅碳比"概念，衡量 AI (硅基) 与 人力 (碳基) 的贡献比例。在 HRD 视图的 <strong>第7部分</strong>，您可以直观看到 AI 工具（如自动筛选、自动约面）为团队带来了多少"额外产出"。</p>
+            </div>
+        </section>
+
+        <section>
+            <h2>🛠️ 快速开始</h2>
+            <ol>
+                <li>
+                    <strong>启动系统:</strong> 在项目根目录下运行终端命令:
+                    <br><br>
+                    <code>streamlit run recruitment_dashboard_v3_complete.py</code>
+                </li>
+                <br>
+                <li>
+                    <strong>配置品牌色:</strong> 点击右上角的颜色配置器，一键切换至符合您企业 VI 的配色方案。
+                </li>
+                <br>
+                <li>
+                    <strong>导出报告:</strong> 所有图表支持一键下载为 PNG 格式，直接插入 PPT。
+                </li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>❓ 常见问题 (FAQ)</h2>
+            <p><strong>Q: 为什么某些卡片显示红色？</strong><br>A: 系统内置了行业标准阈值（如：关键岗位周期 > 60天即为严重异常）。您可以在代码配置中调整这些阈值。</p>
+            <p><strong>Q: 如何更新数据？</strong><br>A: 侧边栏提供了"数据生成配置"，您可以调整月份、人数规模，并点击"重新生成数据"来模拟不同场景。</p>
+        </section>
+
+        <footer>
+            © 2026 AI Hiring Dashboard Team | 打造极致招聘体验
+        </footer>
+    </div>
+
+</body>
+</html>

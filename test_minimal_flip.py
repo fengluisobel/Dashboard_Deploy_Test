@@ -1,4 +1,4 @@
-"""
+﻿"""
 最小化翻转卡片测试 - 直接HTML渲染
 """
 
@@ -106,3 +106,4 @@ render_test_card()
 
 st.write("---")
 st.info("💡 悬停在卡片上查看翻转效果。如果看到原始HTML代码而不是卡片，说明unsafe_allow_html有问题。")
+

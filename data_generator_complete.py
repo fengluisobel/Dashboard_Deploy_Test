@@ -1,4 +1,4 @@
-"""
+﻿"""
 招聘数据驾驶舱 v3.0 Pro - 完整数据生成模块
 包含所有81个指标的完整实现
 基于 BI指标体系.json 和 招聘指标 层级.md
@@ -234,7 +234,7 @@ def generate_complete_recruitment_data(months=12, recruiters=5, departments=5):
                 # ==========================================
 
                 # 部门招聘健康度
-                row['TTF超标率_%'] = np.random.uniform(8, 38)
+                row['到岗周期逾期率_%'] = np.random.uniform(8, 38)
                 row['面试通过率异常_标志'] = np.random.choice([0, 0, 0, 1], p=[0.7, 0.1, 0.1, 0.1])
                 row['投诉量'] = np.random.randint(0, 8)
                 row['部门健康度_得分'] = np.random.uniform(60, 98)
@@ -446,11 +446,11 @@ METRICS_METADATA = {
 
     # HRD 管理层指标
     'hrd': {
-        'TTF超标率_%': {
-            'name': 'TTF超标率',
+        '到岗周期逾期率_%': {
+            'name': '到岗周期逾期率',
             'name_en': 'TTF Overdue Rate',
             'category': '异常管理',
-            'formula': 'TTF>SLA天数的职位数 / 总职位数',
+            'formula': '到岗周期>SLA天数的职位数 / 总职位数',
             'definition': '招聘周期超过承诺SLA的职位比例',
             'boss_comment': '不要给我看平均数,告诉我哪个部门出问题了',
             'benchmark': {'正常': '<15%', '警告': '15-25%', '严重': '>25%'},
@@ -544,15 +544,37 @@ METRICS_METADATA = {
 }
 
 
+
+def seed_db_with_generated_data(months=12, recruiters=5, departments=5):
+    """
+    Check if DB has data, if not, generate and seed it.
+    Returns the dataframe (either loaded or generated).
+    """
+    from db_manager import DBManager
+    
+    db = DBManager()
+    
+    # Try to load existing data
+    df = db.load_data_to_df()
+    
+    if df.empty:
+        print("Initializing Database with new random data...")
+        df = generate_complete_recruitment_data(months, recruiters, departments)
+        db.init_db(df)
+    else:
+        print(f"Loaded {len(df)} records from existing Database.")
+        
+    return df
+
+
 if __name__ == '__main__':
     # 测试数据生成
     print("正在生成完整招聘数据...")
-    df = generate_complete_recruitment_data(months=12, recruiters=5, departments=5)
-    print(f"数据生成完成! 共 {len(df)} 行, {len(df.columns)} 列")
-    print(f"\n数据字段清单:")
-    for i, col in enumerate(df.columns, 1):
-        print(f"{i}. {col}")
-    print(f"\n数据预览:")
+    # df = generate_complete_recruitment_data(months=12, recruiters=5, departments=5)
+    # 使用新的 DB Seed 方式测试
+    df = seed_db_with_generated_data()
+    print(f"数据生成/加载完成! 共 {len(df)} 行, {len(df.columns)} 列")
+    
+    print(f"\nDB中的数据预览:")
     print(df.head())
-    print(f"\n数据统计:")
-    print(df.describe())
+

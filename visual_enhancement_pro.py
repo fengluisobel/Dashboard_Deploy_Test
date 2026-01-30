@@ -1,4 +1,4 @@
-"""
+﻿"""
 招聘数据驾驶舱 v3.0 Pro Max - 专业级UI/UX视觉系统
 Professional UI/UX Enhancement Module
 
@@ -330,18 +330,59 @@ def inject_professional_uiux_css(primary_color='#4A5FE8'):
         opacity: 0.3;
     }}
 
-    /* 侧边栏输入框 */
+    /* 侧边栏输入框 - 强制白底黑字 (High Contrast) */
     [data-testid="stSidebar"] input,
-    [data-testid="stSidebar"] select {{
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    [data-testid="stSidebar"] select,
+    [data-testid="stSidebar"] textarea,
+    [data-testid="stSidebar"] .stTextArea textarea,
+    [data-testid="stSidebar"] .stSelectbox > div > div,
+    [data-testid="stSidebar"] .stTextInput > div > div > input,
+    [data-testid="stSidebar"] .stNumberInput > div > div > input {{
+        background: #FFFFFF !important;
+        border: 1px solid #D1D1D1 !important;
         border-radius: 6px !important;
-        color: #FFFFFF !important;
+        color: #1A1A1A !important;
         padding: 0.5rem !important;
     }}
+    
+    /* 侧边栏输入框 Focus 状态 */
+    [data-testid="stSidebar"] input:focus,
+    [data-testid="stSidebar"] textarea:focus,
+    [data-testid="stSidebar"] select:focus {{
+        border-color: {primary_color} !important;
+        box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) !important;
+        outline: none !important;
+    }}
 
-    [data-testid="stSidebar"] input::placeholder {{
-        color: rgba(255, 255, 255, 0.5) !important;
+    /* 侧边栏 Expander 修复 */
+    [data-testid="stSidebar"] .streamlit-expanderHeader {{
+        background: #3F3F3F !important;
+        border: 1px solid #525252 !important;
+        color: #FFFFFF !important;
+    }}
+
+    [data-testid="stSidebar"] .streamlit-expanderHeader:hover {{
+        background: #525252 !important;
+        border-color: #6B6B6B !important;
+    }}
+
+    [data-testid="stSidebar"] .streamlit-expanderContent {{
+        background: transparent !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-top: none !important;
+        color: #E8E8E8 !important;
+    }}
+
+    /* 侧边栏 placeholder 修复 (Dark Text) */
+    [data-testid="stSidebar"] input::placeholder,
+    [data-testid="stSidebar"] textarea::placeholder {{
+        color: #6B6B6B !important;
+        opacity: 0.7 !important;
+    }}
+
+    /* 侧边栏 select internal text */
+    [data-testid="stSidebar"] .stSelectbox [data-baseweb="select"] div {{
+        color: #1A1A1A !important;
     }}
 
     [data-testid="stSidebar"] input:focus,
@@ -475,6 +516,7 @@ def inject_professional_uiux_css(primary_color='#4A5FE8'):
        ======================================== */
 
     .stTextInput > div > div > input,
+    .stTextArea > div > div > textarea,
     .stNumberInput > div > div > input,
     .stSelectbox > div > div,
     .stMultiSelect > div > div {{
@@ -1020,3 +1062,4 @@ if __name__ == '__main__':
 
     st.markdown("---")
     st.markdown("© 2026 招聘数据驾驶舱 v3.0 Pro Max - 专业级UI/UX视觉系统")
+

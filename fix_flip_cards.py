@@ -1,4 +1,4 @@
-"""
+﻿"""
 强制重新加载翻转卡片系统 - Flip Card Fix Test
 用于诊断和修复翻转卡片渲染问题
 """
@@ -220,3 +220,4 @@ with st.expander("🔧 高级调试 - 查看原始HTML", expanded=False):
 
 st.markdown("---")
 st.caption("© 2026 翻转卡片修复工具 v1.0 | 如需帮助，请查看 FLIP_CARD_DEBUG_GUIDE.md")
+
